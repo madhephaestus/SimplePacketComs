@@ -58,7 +58,7 @@ public:
     return (uint32_t *)buffer;
   }
   float * getDataPointer(){
-    return (float *)buffer+4;
+    return (float *)(buffer+4);
   }
   std::vector<PacketEventAbstract*> * getfMap(){ return &fmap;}
 
