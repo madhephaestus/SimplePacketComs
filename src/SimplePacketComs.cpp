@@ -33,10 +33,16 @@ void SimplePacketComsAbstract::server(){
         return;// packet is responded to, fast return
       }
     }
-    printf("\nUnknown packet %i ",currentId);
-    for(int i=0;i<numberOfBytes;i++){
-      printf("\n\tbyte %i ",buffer[i]);
+    buffer[0]=0;
+    buffer[1]=0;
+    buffer[2]=0;
+    buffer[3]=99;//error packet
+    //printf("\nUnknown packet %i ",currentId);
+    for(int i=4;i<numberOfBytes;i++){
+      buffer[i]=0;
     }
+    sendPacket(buffer, numberOfBytes);
+    return;
   }
 }
 /**
