@@ -7,8 +7,6 @@
 #include "PacketEvent.h"
 #include "client/AbstractSimpleComsDevice.h"
 #include "client/AbstractPacketType.h"
-#include "client/BytePacketType.h"
-#include "client/FloatPacketType.h"
 #include "client/IPacketResponseEvent.h"
 
 #define DEFAULT_PACKET_SIZE_SIMPLE_PACKET 64
