@@ -20,7 +20,6 @@ public:
 	uint8_t * downstream;
 	uint8_t * upstream;
 	long runCount=0;
-	long runDivisor=1;
 	long maxRuns = LONG_MAX;
 	AbstractPacketType(int id, int size) ;
 	virtual ~AbstractPacketType();

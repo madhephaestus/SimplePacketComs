@@ -12,6 +12,8 @@ AbstractPacketType::AbstractPacketType(int id, int size) {
 	downstream = new uint8_t[size];
 	upstream = new uint8_t[size];
 	getDownstreamIdPointer()[0] = id;
+	runCount=0;
+	maxRuns = LONG_MAX;
 
 }
 AbstractPacketType::~AbstractPacketType() {
