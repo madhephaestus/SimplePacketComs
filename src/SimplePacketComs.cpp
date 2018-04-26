@@ -31,8 +31,10 @@ void SimplePacketComsAbstract::server(){
     uint32_t currentId = getIdPointer()[0];
     for (std::vector<PacketEventAbstract* >::iterator it = fmap.begin() ; it != fmap.end(); ++it){
        if((*it)->getId() == currentId){
+    	(*it)->  noResponse=false;// reset the response flag
         (*it)->event(getDataPointer());
-        sendPacket(buffer, numberOfBytes);
+        if((*it)->noResponse==false)// responde unless the no response flag is set
+        	sendPacket(buffer, numberOfBytes);
         return;// packet is responded to, fast return
       }
     }
