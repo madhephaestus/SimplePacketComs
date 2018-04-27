@@ -5,8 +5,8 @@ class PacketEventAbstract {
 protected:
   // Unique id of the function being called
   uint32_t myId;
-  bool noResponse=false;
 public:
+  bool noResponse=false;
   // Packet ID needs to be set
   PacketEventAbstract(uint32_t id);
   //User function to be called when a packet comes in
