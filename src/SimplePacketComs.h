@@ -67,5 +67,6 @@ public:
   std::vector<PacketEventAbstract*> * getfMap(){ return &fmap;}
 
 };
+
 #endif /* end of include guard: SimplePacketComs
  */

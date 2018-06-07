@@ -1,7 +1,5 @@
 #include "SimplePacketComs.h"
-#if defined(ARDUINO)
-#include <Arduino.h>
-#endif
+
 
 SimplePacketComsAbstract::SimplePacketComsAbstract(){
   setNumberOfBytesInPacket(DEFAULT_PACKET_SIZE_SIMPLE_PACKET);
@@ -38,14 +36,7 @@ void SimplePacketComsAbstract::server(){
         return;// packet is responded to, fast return
       }
     }
-#if defined(ARDUINO)
-    Serial.println("Error! ID expected " +String(currentId)+" bytes "+String(buffer[0])+" "+String(buffer[1])+" "+String(buffer[2])+" "+String(buffer[3]));
-    for (std::vector<PacketEventAbstract* >::iterator it = fmap.begin() ; it != fmap.end(); ++it){
-    	uint32_t id = (*it)->getId();
-        Serial.println("\t have: " +String(id));
 
-       }
-#endif
     //printf("\nUnknown packet %i ",currentId);
     for(int i=0;i<4;i++){
     	//copy the incoming missing ID into data

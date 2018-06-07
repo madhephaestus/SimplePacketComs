@@ -6,7 +6,6 @@
  */
 
 #include <client/AbstractSimpleComsDevice.h>
-#include <Arduino.h>
 /**
  * call to shut down the device
  */
@@ -109,7 +108,7 @@ void AbstractSimpleComsDevice::loop(long millis, long timout) {
 		state = Reset;
 		break;
 	case Timeout:
-		Serial.println("AbstractSimpleComsDevice::Timeout");
+		//Serial.println("AbstractSimpleComsDevice::Timeout");
 		//Serial.println("Packet timed out");
 		if (tmpPacket->responseListener != NULL)
 			tmpPacket->responseListener->onTimeout(millis - tranceiveTime);
