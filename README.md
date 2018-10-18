@@ -5,6 +5,71 @@ A simple packet coms library. This is the definition page and C++ implementation
 
 SimplePacketComs is a protocol spec for transmitting data from one endpoint to another. The goal is to allow many different commands to be sent and recived on a single communication channel, with an easy to extend framework. The assumptions that we made is that the physical layer will send and recive alligned, checksummed packets of data. 
 
+# HOWTO use the C++ stack
+
+## New Servers
+```
+class ExampleServer: public PacketEventAbstract {
+public:
+	// Packet ID needs to be set
+	ExampleServer() :
+			PacketEventAbstract(1871) // Address of this event
+	{
+	}
+	//User function to be called when a packet comes in
+	// Buffer contains data from the packet coming in at the start of the function
+	// User data is written into the buffer to send it back
+	void event(float * buffer) {
+		// read from buffer to get incomming data
+    // write to buffer to send data back
+	}
+};
+UDPSimplePacket coms;
+WifiManager manager;
+manager.setup();
+coms.attach((PacketEventAbstract *) new ExampleServer());
+while(true){
+ manager.loop();
+ if(manager.getState()==Connected)
+    coms.server();
+}
+```
+## New clients C++
+```
+WifiManager manager;
+manager.setup();
+this event, Size of packet
+class MessageHandeler:  public IPacketResponseEvent {
+public:
+	MessageHandeler();
+	virtual ~MessageHandeler();
+	void onResponse(int timeBetweenSendAndRecive){
+    Serial.println("Responce!");
+  }
+	void onTimeout(int timeBetweenSendAndRecive){
+    Serial.println("Timeout!");
+  }
+};
+
+boolean once = false;
+while(true){
+  manager.loop();
+  if (manager.getState()==Connected) {
+    if(!once){
+      static IPAddress broadcast=WiFi.localIP();// Get the WiFI connection IP address
+      UDPSimplePacketComs * coms = new UDPSimplePacketComs(&broadcast,true);// Create a Coms device
+      AbstractPacketType * readController =new AbstractPacketType(1871, 64);//Create a client for the server above, Address of 
+      readController->setResponseListener(new MessageHandeler());
+      coms->addPollingPacket(readController); // Add the packet to a polling queue
+      once = true;
+    }
+    coms->loop(millis(), 100);// Loop the server and look for responses
+  }
+}
+
+```
+
+
 ## Packet Structure
 
 Packets consist of 4 bytes to define the command ID and N bytes (detected from the PHY) of data. The Command ID is parsed as a 32 bit unsigned int. The data can be sent as raw bytes or 32 bit floating point numbers. 
