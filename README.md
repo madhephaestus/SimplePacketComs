@@ -5,101 +5,7 @@ A simple packet coms library. This is the definition page and C++ implementation
 
 SimplePacketComs is a protocol spec for transmitting data from one endpoint to another. The goal is to allow many different commands to be sent and recived on a single communication channel, with an easy to extend framework. The assumptions that we made is that the physical layer will send and recive alligned, checksummed packets of data. 
 
-# HOWTO use the C++ stack
 
-## New Servers C++
-```
-class ExampleServer: public PacketEventAbstract {
-public:
-	// Packet ID needs to be set
-	ExampleServer() :
-			PacketEventAbstract(1871) // Address of this event
-	{
-	}
-	//User function to be called when a packet comes in
-	// Buffer contains data from the packet coming in at the start of the function
-	// User data is written into the buffer to send it back
-	void event(float * buffer) {
-		// read from buffer to get incomming data
-    // write to buffer to send data back
-	}
-};
-UDPSimplePacket coms;
-WifiManager manager;
-manager.setup();
-coms.attach((PacketEventAbstract *) new ExampleServer());
-while(true){
- manager.loop();
- if(manager.getState()==Connected)
-    coms.server();
-}
-```
-## New clients C++
-```
-WifiManager manager;
-manager.setup();
-this event, Size of packet
-class ExampleClientMessageHandeler:  public IPacketResponseEvent {
-public:
-	ExampleClientMessageHandeler();
-	virtual ~ExampleClientMessageHandeler();
-	void onResponse(int timeBetweenSendAndRecive){
-    Serial.println("Responce!");
-  }
-	void onTimeout(int timeBetweenSendAndRecive){
-    Serial.println("Timeout!");
-  }
-};
-
-boolean once = false;
-while(true){
-  manager.loop();
-  if (manager.getState()==Connected) {
-    if(!once){
-      static IPAddress broadcast=WiFi.localIP();// Get the WiFI connection IP address
-      UDPSimplePacketComs * coms = new UDPSimplePacketComs(&broadcast,true);// Create a Coms device
-      AbstractPacketType * ExampleClient =new AbstractPacketType(1871, 64);//Create a client for the server above, Address of 
-      ExampleClient->setResponseListener(new ExampleClientMessageHandeler());
-      coms->addPollingPacket(ExampleClient); // Add the packet to a polling queue
-      once = true;
-    }
-    coms->loop(millis(), 100);// Loop the server and look for responses
-  }
-}
-
-```
-## New Clients Java
-
-```
-public class ExampleClient extends UDPSimplePacketComs {
-    private def IMU = new FloatPacketType(1871, 64);
-    double[] data = new double[15];
-    public ExampleClient(InetAddress add) throws Exception {
-        super(add);
-        addPollingPacket(IMU);
-        addEvent(1871,{
-            readFloats(1871, data);
-        });
-    }
- 
-}
-```
-
-## New Servers Java
-
-```
-public class ExampleServer extends UdpServer {
-	public ExampleServer(String name, int index) {
-		super(name);
-		addServer(new FloatServer(1871) {
-			public boolean event(float[] packet) {
-			}
-		});
-	}
-
-}
-
-```
 
 ## Packet Structure
 
@@ -203,3 +109,101 @@ The Arduino is now set up.
 In BowlerStudio, run https://gist.github.com/5931b62a4f02216136583ec67dd993ff.git BNO055Visualizer.groovy
 
 You will see the device connect and a small servo display on the screen. The Orentation of the servo is controlled by the BNO055.
+# HOWTO use the C++ stack
+
+## New Servers C++
+```
+class ExampleServer: public PacketEventAbstract {
+public:
+	// Packet ID needs to be set
+	ExampleServer() :
+			PacketEventAbstract(1871) // Address of this event
+	{
+	}
+	//User function to be called when a packet comes in
+	// Buffer contains data from the packet coming in at the start of the function
+	// User data is written into the buffer to send it back
+	void event(float * buffer) {
+		// read from buffer to get incomming data
+    // write to buffer to send data back
+	}
+};
+UDPSimplePacket coms;
+WifiManager manager;
+manager.setup();
+coms.attach((PacketEventAbstract *) new ExampleServer());
+while(true){
+ manager.loop();
+ if(manager.getState()==Connected)
+    coms.server();
+}
+```
+## New clients C++
+```
+WifiManager manager;
+manager.setup();
+this event, Size of packet
+class ExampleClientMessageHandeler:  public IPacketResponseEvent {
+public:
+	ExampleClientMessageHandeler();
+	virtual ~ExampleClientMessageHandeler();
+	void onResponse(int timeBetweenSendAndRecive){
+    Serial.println("Responce!");
+  }
+	void onTimeout(int timeBetweenSendAndRecive){
+    Serial.println("Timeout!");
+  }
+};
+
+boolean once = false;
+while(true){
+  manager.loop();
+  if (manager.getState()==Connected) {
+    if(!once){
+      static IPAddress broadcast=WiFi.localIP();// Get the WiFI connection IP address
+      UDPSimplePacketComs * coms = new UDPSimplePacketComs(&broadcast,true);// Create a Coms device
+      AbstractPacketType * ExampleClient =new AbstractPacketType(1871, 64);//Create a client for the server above, Address of 
+      ExampleClient->setResponseListener(new ExampleClientMessageHandeler());
+      coms->addPollingPacket(ExampleClient); // Add the packet to a polling queue
+      once = true;
+    }
+    coms->loop(millis(), 100);// Loop the server and look for responses
+  }
+}
+
+```
+
+# HOWTO Use the Java Stack
+
+## New Clients Java
+
+```
+public class ExampleClient extends UDPSimplePacketComs {
+    private def IMU = new FloatPacketType(1871, 64);
+    double[] data = new double[15];
+    public ExampleClient(InetAddress add) throws Exception {
+        super(add);
+        addPollingPacket(IMU);
+        addEvent(1871,{
+            readFloats(1871, data);
+        });
+    }
+ 
+}
+```
+
+## New Servers Java
+
+```
+public class ExampleServer extends UdpServer {
+	public ExampleServer(String name, int index) {
+		super(name);
+		addServer(new FloatServer(1871) {
+			public boolean event(float[] packet) {
+			}
+		});
+	}
+
+}
+
+```
