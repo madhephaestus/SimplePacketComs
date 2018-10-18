@@ -7,7 +7,7 @@ SimplePacketComs is a protocol spec for transmitting data from one endpoint to a
 
 # HOWTO use the C++ stack
 
-## New Servers
+## New Servers C++
 ```
 class ExampleServer: public PacketEventAbstract {
 public:
@@ -39,10 +39,10 @@ while(true){
 WifiManager manager;
 manager.setup();
 this event, Size of packet
-class MessageHandeler:  public IPacketResponseEvent {
+class ExampleClientMessageHandeler:  public IPacketResponseEvent {
 public:
-	MessageHandeler();
-	virtual ~MessageHandeler();
+	ExampleClientMessageHandeler();
+	virtual ~ExampleClientMessageHandeler();
 	void onResponse(int timeBetweenSendAndRecive){
     Serial.println("Responce!");
   }
@@ -58,9 +58,9 @@ while(true){
     if(!once){
       static IPAddress broadcast=WiFi.localIP();// Get the WiFI connection IP address
       UDPSimplePacketComs * coms = new UDPSimplePacketComs(&broadcast,true);// Create a Coms device
-      AbstractPacketType * readController =new AbstractPacketType(1871, 64);//Create a client for the server above, Address of 
-      readController->setResponseListener(new MessageHandeler());
-      coms->addPollingPacket(readController); // Add the packet to a polling queue
+      AbstractPacketType * ExampleClient =new AbstractPacketType(1871, 64);//Create a client for the server above, Address of 
+      ExampleClient->setResponseListener(new ExampleClientMessageHandeler());
+      coms->addPollingPacket(ExampleClient); // Add the packet to a polling queue
       once = true;
     }
     coms->loop(millis(), 100);// Loop the server and look for responses
@@ -68,7 +68,38 @@ while(true){
 }
 
 ```
+## New Clients Java
 
+```
+public class ExampleClient extends UDPSimplePacketComs {
+    private def IMU = new FloatPacketType(1871, 64);
+    double[] data = new double[15];
+    public ExampleClient(InetAddress add) throws Exception {
+        super(add);
+        addPollingPacket(IMU);
+        addEvent(1871,{
+            readFloats(1871, data);
+        });
+    }
+ 
+}
+```
+
+## New Servers Java
+
+```
+public class ExampleServer extends UdpServer {
+	public ExampleServer(String name, int index) {
+		super(name);
+		addServer(new FloatServer(1871) {
+			public boolean event(float[] packet) {
+			}
+		});
+	}
+
+}
+
+```
 
 ## Packet Structure
 
