@@ -82,4 +82,28 @@ In Library Manager search for Teensy32SimplePacketComs
 In Library Manager search for Esp32SimplePacketComs
 
 
+# Code Examples
 
+For a code example we will use the C++ Stack in Arduino, the Esp32SimplePacketComs Phy, and the BNO055Server on the device side. On the recive side we will use SimplePacketComsJava and a Groovy script to connect to the device. 
+
+## Arduino Setup
+
+Install from the Library Manager
+
+```
+Esp32SimplePacketComs
+SimplePacketComs
+BNO055SimplePacketComs
+```
+
+Open the Example -> BNO055SimplePacketComs -> BNO055Server and program your ESP32. If you have never used a WiFiManager before, open the serial moniter (make sure no line endings is enabled) and type your Wifi SSID and hit enter. Wait to be prompted for the password. Then type the password and hit enter. Once connected to the Wifi the IP address will be written out to the non volitile memory. This device will connect automatically from no on. 
+
+Get a BNO055 sensor from Adafruit or Digikey and connect it to the I2C bus on your ESP32. 
+
+The Arduino is now set up.
+
+## Groovy setup
+
+In BowlerStudio, run https://gist.github.com/5931b62a4f02216136583ec67dd993ff.git BNO055Visualizer.groovy
+
+You will see the device connect and a small servo display on the screen. The Orentation of the servo is controlled by the BNO055.
