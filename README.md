@@ -1,17 +1,15 @@
 # SimplePacketComs
 A simple packet coms library. This is the definition page and C++ implementation of SimplePacketComs. 
 
-# Theory Of Opperation
+# Theory Of Operation
 
-SimplePacketComs is a protocol spec for transmitting data from one endpoint to another. The goal is to allow many different commands to be sent and recived on a single communication channel, with an easy to extend framework. The assumptions that we made is that the physical layer will send and recive alligned, checksummed packets of data. 
-
-
+SimplePacketComs is a protocol spec for transmitting data from one endpoint to another. The goal is to allow many different commands to be sent and received on a single communication channel, with an easy to extend framework. The assumptions that we made is that the physical layer will send and receive aligned, checksummed packets of data. 
 
 ## Packet Structure
 
 Packets consist of 4 bytes to define the command ID and N bytes (detected from the PHY) of data. The Command ID is parsed as a 32 bit unsigned int. The data can be sent as raw bytes or 32 bit floating point numbers. 
 
-By convention a standard packet is 64 bytes. If both sides of an implementation change this, it does nto break spec, but for "Simplicity" this is not transmitted in packet data and must be agreed upon ahead of time by both sides of the command stack. 
+By convention, a standard packet is 64 bytes. If both sides of an implementation change this, it does not break spec, but for "Simplicity" this is not transmitted in packet data and must be agreed upon ahead of time by both sides of the command stack. 
 
 ### Byte Packets
 
@@ -27,7 +25,7 @@ An example byte packet from the Game Controller looks like this:
 
 ### Float packets
 
-An example float packet from the ware house robot looks like this:
+An example float packet from the warehouse robot looks like this:
 
 | |ID | float |float |float |float |float |float |
 |--- |--- | --- |--- | --- |--- | --- | --- |
@@ -65,7 +63,7 @@ compile "com.neuronrobotics:SimplePacketComsJava:0.3.0"
 
 https://github.com/madhephaestus/SimplePacketComsJava
 
-## Matlab (Experemental)
+## Matlab (Experimental)
 
 https://github.com/WPIRoboticsEngineering/RBE3001_Matlab
 
@@ -86,7 +84,7 @@ In Library Manager search for Esp32SimplePacketComs
 
 # Code Examples
 
-For a code example we will use the C++ Stack in Arduino, the Esp32SimplePacketComs Phy, and the BNO055Server on the device side. On the recive side we will use SimplePacketComsJava and a Groovy script to connect to the device. 
+For a code example, we will use the C++ Stack in Arduino, the Esp32SimplePacketComs Phy, and the BNO055Server on the device side. On the receive side we will use SimplePacketComsJava and a Groovy script to connect to the device. 
 
 ## Arduino Setup
 
@@ -98,7 +96,7 @@ SimplePacketComs
 BNO055SimplePacketComs
 ```
 
-Open the Example -> BNO055SimplePacketComs -> BNO055Server and program your ESP32. If you have never used a WiFiManager before, open the serial moniter (make sure no line endings is enabled) and type your Wifi SSID and hit enter. Wait to be prompted for the password. Then type the password and hit enter. Once connected to the Wifi the IP address will be written out to the non volitile memory. This device will connect automatically from no on. 
+Open the Example -> BNO055SimplePacketComs -> BNO055Server and program your ESP32. If you have never used a WiFiManager before, open the serial monitor (make sure no line endings is enabled) and type your Wifi SSID and hit enter. Wait to be prompted for the password. Then type the password and hit enter. Once connected to the Wifi the IP address will be written out to the non-volatile memory. This device will connect automatically from now on. 
 
 Get a BNO055 sensor from Adafruit or Digikey and connect it to the I2C bus on your ESP32. 
 
@@ -108,25 +106,25 @@ The Arduino is now set up.
 
 In BowlerStudio, run https://gist.github.com/5931b62a4f02216136583ec67dd993ff.git BNO055Visualizer.groovy
 
-You will see the device connect and a small servo display on the screen. The Orentation of the servo is controlled by the BNO055.
+You will see the device connect and a small servo display on the screen. The orientation of the servo is controlled by the BNO055.
 # HOWTO use the C++ stack
 
 ## New Servers C++
 ```
 class ExampleServer: public PacketEventAbstract {
 public:
-	// Packet ID needs to be set
-	ExampleServer() :
-			PacketEventAbstract(1871) // Address of this event
-	{
-	}
-	//User function to be called when a packet comes in
-	// Buffer contains data from the packet coming in at the start of the function
-	// User data is written into the buffer to send it back
-	void event(float * buffer) {
-		// read from buffer to get incomming data
+    // Packet ID needs to be set
+    ExampleServer() :
+            PacketEventAbstract(1871) // Address of this event
+    {
+    }
+    //User function to be called when a packet comes in
+    // Buffer contains data from the packet coming in at the start of the function
+    // User data is written into the buffer to send it back
+    void event(float * buffer) {
+        // read from buffer to get incomming data
     // write to buffer to send data back
-	}
+    }
 };
 UDPSimplePacket coms;
 WifiManager manager;
@@ -145,12 +143,12 @@ manager.setup();
 this event, Size of packet
 class ExampleClientMessageHandeler:  public IPacketResponseEvent {
 public:
-	ExampleClientMessageHandeler();
-	virtual ~ExampleClientMessageHandeler();
-	void onResponse(int timeBetweenSendAndRecive){
+    ExampleClientMessageHandeler();
+    virtual ~ExampleClientMessageHandeler();
+    void onResponse(int timeBetweenSendAndRecive){
     Serial.println("Responce!");
   }
-	void onTimeout(int timeBetweenSendAndRecive){
+    void onTimeout(int timeBetweenSendAndRecive){
     Serial.println("Timeout!");
   }
 };
@@ -196,13 +194,13 @@ public class ExampleClient extends UDPSimplePacketComs {
 
 ```
 public class ExampleServer extends UdpServer {
-	public ExampleServer(String name, int index) {
-		super(name);
-		addServer(new FloatServer(1871) {
-			public boolean event(float[] packet) {
-			}
-		});
-	}
+    public ExampleServer(String name, int index) {
+        super(name);
+        addServer(new FloatServer(1871) {
+            public boolean event(float[] packet) {
+            }
+        });
+    }
 
 }
 
