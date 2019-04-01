@@ -47,8 +47,9 @@ In Library Manager search for SimplePacketComs
 https://github.com/madhephaestus/SimplePacketComs/
 
 ## Java
+![](https://img.shields.io/nexus/r/https/oss.sonatype.org/com.neuronrobotics/SimplePacketComsJava.svg?style=flat) 
 
-### Gradle 
+# Gradle 
 
 ```
 repositories {
@@ -56,7 +57,7 @@ repositories {
 maven { url 'https://oss.sonatype.org/content/repositories/staging/' }
 }
 dependencies {
-compile "com.neuronrobotics:SimplePacketComsJava:0.3.0"
+compile "com.neuronrobotics:SimplePacketComsJava:SEE BADGE FOR VERSION "
 }
 ```
 ### Source
