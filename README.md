@@ -190,20 +190,8 @@ public class ExampleClient extends UDPSimplePacketComs {
     }
     // Search for devices instead of just construction them
     public static ExampleClient get(String name) throws Exception {
-		HashSet<InetAddress> addresses = UDPSimplePacketComs.getAllAddresses(name);
-		if (addresses.size() < 1) {
-			System.out.println("No " + ExampleClient.class.getSimpleName() + " found named " + name);
-			return robots;
-		}
-		for (InetAddress add : addresses) {
-			System.out.println("Got " + add.getHostAddress());
-			ExampleClient e = new ExampleClient(add);
-			e.connect();
-			e.setReadTimeout(200);
-			return e;
-		}
-		return null;
-	}
+	return new ExampleClient(UDPSimplePacketComs.getAllAddresses(name).iterator().next()); 
+    }
  
 }
 
