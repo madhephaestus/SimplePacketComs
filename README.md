@@ -178,12 +178,12 @@ while(true){
 
 ```
 public class ExampleClient extends UDPSimplePacketComs {
-    private def IMU = new FloatPacketType(1871, 64);
+    private FloatPacketType IMU = new FloatPacketType(1871, 64);
     double[] data = new double[15];
     public ExampleClient(InetAddress add) throws Exception {
         super(add);
         addPollingPacket(IMU);
-        addEvent(1871,{
+        addEvent(1871,()->{
             readFloats(1871, data);
         });
     }
