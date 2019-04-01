@@ -130,7 +130,8 @@ public:
 UDPSimplePacket coms;
 WifiManager manager;
 manager.setup();
-coms.attach((PacketEventAbstract *) new ExampleServer());
+coms.attach( new ExampleServer());
+coms.attach(new NameCheckerServer("MyRobotName")); 
 while(true){
  manager.loop();
  if(manager.getState()==Connected)
@@ -205,6 +206,8 @@ public class ExampleClient extends UDPSimplePacketComs {
 	}
  
 }
+
+ExampleClient myInstance = ExampleClient.get("MyRobotName");
 ```
 
 ## New Servers Java
