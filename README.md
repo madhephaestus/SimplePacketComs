@@ -180,13 +180,29 @@ while(true){
 public class ExampleClient extends UDPSimplePacketComs {
     private FloatPacketType IMU = new FloatPacketType(1871, 64);
     double[] data = new double[15];
-    public ExampleClient(InetAddress add) throws Exception {
+    private ExampleClient(InetAddress add) throws Exception {
         super(add);
         addPollingPacket(IMU);
         addEvent(1871,()->{
             readFloats(1871, data);
         });
     }
+    // Search for devices instead of just construction them
+    public static ExampleClient get(String name) throws Exception {
+		HashSet<InetAddress> addresses = UDPSimplePacketComs.getAllAddresses(name);
+		if (addresses.size() < 1) {
+			System.out.println("No " + ExampleClient.class.getSimpleName() + " found named " + name);
+			return robots;
+		}
+		for (InetAddress add : addresses) {
+			System.out.println("Got " + add.getHostAddress());
+			ExampleClient e = new ExampleClient(add);
+			e.connect();
+			e.setReadTimeout(200);
+			return e;
+		}
+		return null;
+	}
  
 }
 ```
