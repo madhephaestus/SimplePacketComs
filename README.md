@@ -188,16 +188,14 @@ public class ExampleClient extends UDPSimplePacketComs {
             readFloats(1871, data);
         });
     }
-
-    public void send(double d){
-    	double [] data = new double [1];
-	data[0]=d;
-	writeFloat(1871,data);
+    public double get(int index){
+    	return data[index];
     }
- 
+    public void send(int index,double d){
+    	IMU.getDownstream()[index]=d;
+    }
 }
 
-ExampleClient myInstance = ExampleClient.get("MyRobotName");
 ```
 
 ## New Servers Java
