@@ -192,6 +192,11 @@ public class ExampleClient extends UDPSimplePacketComs {
     public static ExampleClient get(String name) throws Exception {
 	return new ExampleClient(UDPSimplePacketComs.getAllAddresses(name).iterator().next()); 
     }
+    public void send(double d){
+    	double [] data = new double [1];
+	data[0]=d;
+	writeFloat(1871,data);
+    }
  
 }
 
