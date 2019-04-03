@@ -181,17 +181,14 @@ while(true){
 public class ExampleClient extends UDPSimplePacketComs {
     private FloatPacketType IMU = new FloatPacketType(1871, 64);
     double[] data = new double[15];
-    private ExampleClient(InetAddress add) throws Exception {
-        super(add);
+    public ExampleClient(String name) throws Exception {
+        super(name);
         addPollingPacket(IMU);
         addEvent(1871,()->{
             readFloats(1871, data);
         });
     }
-    // Search for devices instead of just construction them
-    public static ExampleClient get(String name) throws Exception {
-	return new ExampleClient(UDPSimplePacketComs.getAllAddresses(name).iterator().next()); 
-    }
+
     public void send(double d){
     	double [] data = new double [1];
 	data[0]=d;
