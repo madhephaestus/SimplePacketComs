@@ -17,7 +17,13 @@ uint32_t SimplePacketComsAbstract::getNumberOfFloatsInPacket(){
 }
 
 void SimplePacketComsAbstract::attach(PacketEventAbstract * eventImplementation){
-  fmap.push_back(eventImplementation);
+  fmap[eventImplementation->getId()] = eventImplementation;
+}
+
+PacketEventAbstract * SimplePacketComsAbstract::detach(uint32_t id) {
+  PacketEventAbstract *event = fmap[id];
+  fmap.erase(id);
+  return event;
 }
 
 /**
@@ -27,13 +33,17 @@ void SimplePacketComsAbstract::server(){
   if(isPacketAvailible()){
     getPacket(buffer, numberOfBytes);
     uint32_t currentId = getIdPointer()[0];
-    for (std::vector<PacketEventAbstract* >::iterator it = fmap.begin() ; it != fmap.end(); ++it){
-       if((*it)->getId() == currentId){
-    	(*it)-> noResponse=false;// reset the response flag
-        (*it)->event(getDataPointer());
-        if((*it)->noResponse==false)// responde unless the no response flag is set
-        	sendPacket(buffer, numberOfBytes);
-        return;// packet is responded to, fast return
+    for (std::map<uint32_t, PacketEventAbstract*>::iterator it = fmap.begin() ; it != fmap.end(); ++it){
+      if (it->second->getId() == currentId) {
+        it->second->noResponse = false; // reset the response flag
+        it->second->event(getDataPointer());
+
+        if (it->second->noResponse == false) {
+          // respond unless the no response flag is set
+          sendPacket(buffer, numberOfBytes);
+        }
+
+        return; // packet is responded to, fast return
       }
     }
 

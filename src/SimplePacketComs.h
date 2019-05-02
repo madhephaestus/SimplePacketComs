@@ -2,7 +2,7 @@
 #define SimplePacketComs
 #include <stdint.h>
 #include <stdio.h>
-#include <vector>
+#include <map>
 #include <iostream>
 #include "PacketEvent.h"
 #include "client/AbstractSimpleComsDevice.h"
@@ -15,7 +15,7 @@ class SimplePacketComsAbstract {
 private:
    uint32_t numberOfBytes;
    uint8_t * buffer;
-   std::vector<PacketEventAbstract*> fmap;
+   std::map<uint32_t, PacketEventAbstract*> fmap;
 public:
   SimplePacketComsAbstract();
   /**
@@ -50,6 +50,13 @@ public:
   */
   void attach(PacketEventAbstract * eventImplementation);
   /**
+   * Detach a function from a packet event.
+   * 
+   * @param id The packet id.
+   * @return The function that was attached.
+   */
+  PacketEventAbstract * detach(uint32_t id);
+  /**
   * This runs the packet server and calls all events if a backet comes in
   */
   void server();
@@ -64,7 +71,7 @@ public:
   float * getDataPointer(){
     return (float *)(buffer+4);
   }
-  std::vector<PacketEventAbstract*> * getfMap(){ return &fmap;}
+  std::map<uint32_t, PacketEventAbstract*> * getfMap(){ return &fmap;}
 
 };
 
