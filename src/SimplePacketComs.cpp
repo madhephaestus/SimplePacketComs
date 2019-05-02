@@ -16,37 +16,38 @@ uint32_t SimplePacketComsAbstract::getNumberOfFloatsInPacket() {
 	return (numberOfBytes / 4) - 1;
 }
 
-
-void SimplePacketComsAbstract::attach(PacketEventAbstract * eventImplementation){
-  fmap[eventImplementation->getId()] = eventImplementation;
+void SimplePacketComsAbstract::attach(
+		PacketEventAbstract * eventImplementation) {
+	fmap[eventImplementation->getId()] = eventImplementation;
 }
 
 PacketEventAbstract * SimplePacketComsAbstract::detach(uint32_t id) {
-  PacketEventAbstract *event = fmap[id];
-  fmap.erase(id);
-  return event;
+	PacketEventAbstract *event = fmap[id];
+	fmap.erase(id);
+	return event;
 }
 
 /**
-* This runs the packet server and calls all events if a backet comes in
-*/
-void SimplePacketComsAbstract::server(){
-  if(isPacketAvailible()){
-    getPacket(buffer, numberOfBytes);
-    uint32_t currentId = getIdPointer()[0];
-    for (std::map<uint32_t, PacketEventAbstract*>::iterator it = fmap.begin() ; it != fmap.end(); ++it){
-      if (it->second->getId() == currentId) {
-        it->second->noResponse = false; // reset the response flag
-        it->second->event(getDataPointer());
+ * This runs the packet server and calls all events if a backet comes in
+ */
+void SimplePacketComsAbstract::server() {
+	if (isPacketAvailible()) {
+		getPacket(buffer, numberOfBytes);
+		uint32_t currentId = getIdPointer()[0];
+		for (std::map<uint32_t, PacketEventAbstract*>::iterator it =
+				fmap.begin(); it != fmap.end(); ++it) {
+			if (it->second->getId() == currentId) {
+				it->second->noResponse = false; // reset the response flag
+				it->second->event(getDataPointer());
 
-        if (it->second->noResponse == false) {
-          // respond unless the no response flag is set
-          sendPacket(buffer, numberOfBytes);
-        }
+				if (it->second->noResponse == false) {
+					// respond unless the no response flag is set
+					sendPacket(buffer, numberOfBytes);
+				}
 
-        return; // packet is responded to, fast return
-      }
-    }
+				return; // packet is responded to, fast return
+			}
+		}
 
 		//printf("\nUnknown packet %i ",currentId);
 		for (int i = 0; i < 4; i++) {
