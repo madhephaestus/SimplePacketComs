@@ -14,21 +14,21 @@
 class AbstractPacketType {
 
 public:
-	IPacketResponseEvent * responseListener=NULL;
+	IPacketResponseEvent * responseListener = NULL;
 
 	int packetSize;
 	uint8_t * downstream;
 	uint8_t * upstream;
-	long runCount=0;
+	long runCount = 0;
 	long maxRuns = LONG_MAX;
-	AbstractPacketType(int id, int size) ;
+	AbstractPacketType(int id, int size);
 	virtual ~AbstractPacketType();
 
 	uint32_t * getUpstreamIdPointer();
 	uint32_t * getDownstreamIdPointer();
-	uint32_t  getId() ;
-	uint8_t * getUpstreamBytes() ;
-	uint8_t * getDownstreamBytes() ;
+	uint32_t getId();
+	uint8_t * getUpstreamBytes();
+	uint8_t * getDownstreamBytes();
 	float * getUpstreamFloats();
 	float * getDownstreamFloats();
 	/**

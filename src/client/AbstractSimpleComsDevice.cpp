@@ -72,12 +72,12 @@ void AbstractSimpleComsDevice::loop(long millis, long timout) {
 
 		tmpPacket = (*it);
 		if (tmpPacket->runCount > tmpPacket->maxRuns) {
-			state = Reset;//skip this packet, it has run too often
+			state = Reset; //skip this packet, it has run too often
 			break;
 		}
 
 		if (tmpPacket->runCount == LONG_MAX) {
-			tmpPacket->runCount=0;//reset for roll over of continuous polling
+			tmpPacket->runCount = 0; //reset for roll over of continuous polling
 			break;
 		}
 		//Serial.println("AbstractSimpleComsDevice::SkipCheck");

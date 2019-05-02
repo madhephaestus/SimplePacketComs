@@ -14,14 +14,16 @@
 #include "AbstractPacketType.h"
 #include "IPacketResponseEvent.h"
 
-enum TranceiveState { Start,SkipCheck, Process, WaitingForResponse,GotResponse,Timeout,Reset };
+enum TranceiveState {
+	Start, SkipCheck, Process, WaitingForResponse, GotResponse, Timeout, Reset
+};
 class AbstractSimpleComsDevice {
 private:
 	std::vector<AbstractPacketType*> pollingQueue;
-	TranceiveState state=Start;
-	std::vector<AbstractPacketType* >::iterator it;
-	AbstractPacketType * tmpPacket ;
-	unsigned long  tranceiveTime=0;
+	TranceiveState state = Start;
+	std::vector<AbstractPacketType*>::iterator it;
+	AbstractPacketType * tmpPacket;
+	unsigned long tranceiveTime = 0;
 	/**
 	 * Write one packet through the device
 	 * If the device is not ready this will return fast
@@ -35,7 +37,8 @@ private:
 	 */
 	bool readPacket(AbstractPacketType * packet, int timeBetweenSendAndRecive);
 public:
-	AbstractSimpleComsDevice(){}
+	AbstractSimpleComsDevice() {
+	}
 	virtual ~AbstractSimpleComsDevice();
 	/**
 	 * call to shut down the device
@@ -76,7 +79,7 @@ protected:
 	virtual bool isReadyDeviceImp()=0;
 	/**
 	 * Blocking read with timeout. This should wait for a reasonably long amount of time (200 ms)
- 	 * If time is exceeded return 0
+	 * If time is exceeded return 0
 	 */
 	virtual int read(uint8_t* message)=0;
 	/**
