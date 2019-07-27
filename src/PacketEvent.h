@@ -20,9 +20,7 @@ public:
 	 */
 	virtual bool loop(){return false;}
 
-	uint32_t getId() {
-		return myId;
-	}
+	uint32_t getId();
 };
 
 #endif /* end of include guard: PacketEvent */

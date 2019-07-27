@@ -38,6 +38,7 @@ void SimplePacketComsAbstract::server() {
 				fmap.begin(); it != fmap.end(); ++it) {
 			if (it->second->getId() == currentId) {
 				it->second->noResponse = false; // reset the response flag
+				it->second->loop();
 				it->second->event(getDataPointer());
 
 				if (it->second->noResponse == false) {
