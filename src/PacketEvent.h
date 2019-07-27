@@ -14,6 +14,12 @@ public:
 	// Buffer contains data from the packet coming in at the start of the function
 	// User data is written into the buffer to send it back 
 	virtual void event(float * buffer)=0;
+	/**
+	 * An optional loop function
+	 * If your server needs a pulse to keep it updated, implement this function
+	 */
+	virtual bool loop(){return false;}
+
 	uint32_t getId() {
 		return myId;
 	}
