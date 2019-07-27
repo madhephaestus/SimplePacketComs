@@ -16,7 +16,7 @@ private:
 
 	uint32_t numberOfBytes;
 	uint8_t * buffer;
-	std::map<uint32_t, PacketEventAbstract*> fmap;
+	std::map<uint32_t, PacketEvent*> fmap;
 public:
 	SimplePacketComsAbstract();
 	/**
@@ -49,14 +49,14 @@ public:
 	/**
 	 * Attach a function to a packet event
 	 */
-	void attach(PacketEventAbstract * eventImplementation);
+	void attach(PacketEvent * eventImplementation);
 	/**
 	 * Detach a function from a packet event.
 	 *
 	 * @param id The packet id.
 	 * @return The function that was attached.
 	 */
-	PacketEventAbstract * detach(uint32_t id);
+	PacketEvent * detach(uint32_t id);
 	/**
 	 * This runs the packet server and calls all events if a backet comes in
 	 */
@@ -72,7 +72,7 @@ public:
 	float * getDataPointer() {
 		return (float *) (buffer + 4);
 	}
-	std::map<uint32_t, PacketEventAbstract*> * getfMap() {
+	std::map<uint32_t, PacketEvent*> * getfMap() {
 		return &fmap;
 	}
 

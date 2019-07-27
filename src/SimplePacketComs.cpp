@@ -17,12 +17,12 @@ uint32_t SimplePacketComsAbstract::getNumberOfFloatsInPacket() {
 }
 
 void SimplePacketComsAbstract::attach(
-		PacketEventAbstract * eventImplementation) {
+		PacketEvent * eventImplementation) {
 	fmap[eventImplementation->getId()] = eventImplementation;
 }
 
-PacketEventAbstract * SimplePacketComsAbstract::detach(uint32_t id) {
-	PacketEventAbstract *event = fmap[id];
+PacketEvent * SimplePacketComsAbstract::detach(uint32_t id) {
+	PacketEvent *event = fmap[id];
 	fmap.erase(id);
 	return event;
 }
@@ -31,14 +31,17 @@ PacketEventAbstract * SimplePacketComsAbstract::detach(uint32_t id) {
  * This runs the packet server and calls all events if a backet comes in
  */
 void SimplePacketComsAbstract::server() {
+	for (std::map<uint32_t, PacketEvent*>::iterator it = fmap.begin();
+			it != fmap.end(); ++it) {
+		it->second->loop();
+	}
 	if (isPacketAvailible()) {
 		getPacket(buffer, numberOfBytes);
 		uint32_t currentId = getIdPointer()[0];
-		for (std::map<uint32_t, PacketEventAbstract*>::iterator it =
+		for (std::map<uint32_t, PacketEvent*>::iterator it =
 				fmap.begin(); it != fmap.end(); ++it) {
 			if (it->second->getId() == currentId) {
 				it->second->noResponse = false; // reset the response flag
-				it->second->loop();
 				it->second->event(getDataPointer());
 
 				if (it->second->noResponse == false) {

@@ -1,8 +1,11 @@
 #include "PacketEvent.h"
 
-PacketEventAbstract::PacketEventAbstract(uint32_t id) {
+PacketEvent::PacketEvent(uint32_t id) {
 	myId = id;
 }
-uint32_t PacketEventAbstract::getId() {
+PacketEventAbstract::PacketEventAbstract(uint32_t id) :
+		PacketEvent(id) {
+}
+uint32_t PacketEvent::getId() {
 	return myId;
 }
