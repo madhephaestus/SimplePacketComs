@@ -1,6 +1,8 @@
 # SimplePacketComs
 A simple packet coms library. This is the definition page and C++ implementation of SimplePacketComs. 
 
+A small update: This library is not dead or stagnent, just stable. Still in active daily use. 
+
 # Theory Of Operation
 
 SimplePacketComs is a protocol spec for transmitting data from one endpoint to another. The goal is to allow many different commands to be sent and received on a single communication channel, with an easy to extend framework. The assumptions that we made is that the physical layer will send and receive aligned, checksummed packets of data. 
